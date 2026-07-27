@@ -21,5 +21,9 @@ jobs:
           git config user.name "racebound-events-bot"
           git config user.email "actions@github.com"
           git add global_events.json
-          git diff --cached --quiet || git commit -m "Auto-generate upcoming week(s)"
-          git diff --cached --quiet || git push
+          if git diff --cached --quiet; then
+            echo "Nothing staged — auto_generate.py made no changes."
+          else
+            git commit -m "Auto-generate upcoming week(s)"
+            git push
+          fi
