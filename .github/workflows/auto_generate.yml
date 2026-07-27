@@ -2,7 +2,12 @@ name: Auto-generate upcoming weeks
 
 on:
   schedule:
-    - cron: "0 12 * * 1"   # every Monday at 12:00 UTC
+    # Every Wednesday 21:00 UTC — 3 hours before the actual weekly reset.
+    # GlobalEvent.week_index() boundaries always land on Thursday 00:00 UTC
+    # (an artifact of the raw Unix-epoch week math), so this keeps the
+    # window topped up right before each new week goes live rather than on
+    # an arbitrary day mid-week.
+    - cron: "0 21 * * 3"
   workflow_dispatch: {}    # allows a manual "Run workflow" trigger too
 
 permissions:
