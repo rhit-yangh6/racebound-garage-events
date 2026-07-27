@@ -4,7 +4,21 @@ Weekly Global Event picks for RaceBound Garage, fetched at runtime from
 `global_events.json`. A week with no entry here just falls back to the
 game's own deterministic pick — nothing needs to be filled in ahead of time.
 
-## Adding a week
+## Auto-generation (default — no manual work needed)
+
+`.github/workflows/auto_generate.yml` runs every Monday (and can be
+triggered manually via "Run workflow"), keeping the next 4 weeks always
+filled — it avoids repeating a car within 20 weeks or a track within 6
+weeks of its last use, falling back to the full pool if that ever leaves
+nothing to pick from. It only ever fills weeks that don't already have an
+entry, so hand-curated weeks (see below) are never touched or overwritten.
+It commits straight to `main` — this is meant to run with zero ongoing
+attention.
+
+## Hand-picking a specific week (optional)
+
+If you want to override a specific week instead of leaving it to
+auto-generation:
 
 ```
 python add_week.py --car ferrari_458 --track monza --date 2026-08-06
