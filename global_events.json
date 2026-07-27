@@ -5,6 +5,24 @@
       "track": "monza",
       "layout": "",
       "note": "week of 2026-07-27"
+    },
+    "2952": {
+      "car": "lotus_exige_240_s3",
+      "track": "magione",
+      "layout": "",
+      "note": "auto-generated"
+    },
+    "2953": {
+      "car": "bmw_m3_e30",
+      "track": "ks_silverstone",
+      "layout": "",
+      "note": "auto-generated"
+    },
+    "2954": {
+      "car": "lotus_98t",
+      "track": "imola",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
