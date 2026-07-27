@@ -1,0 +1,19 @@
+name: Validate global_events.json
+
+on:
+  push:
+    paths:
+      - "global_events.json"
+  pull_request:
+    paths:
+      - "global_events.json"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python validate.py
