@@ -16,6 +16,20 @@ Exit code 0 = all entries valid. Exit code 1 = at least one problem found
 import json
 import sys
 
+# Mirrors scripts/core/global_event.gd's SECONDS_PER_WEEK / WEEK_OFFSET_SEC.
+# Raw Unix-epoch week boundaries land on Thursday 00:00 UTC (Jan 1 1970 was
+# a Thursday) — this shifts them 3 days earlier to land on Monday 00:00 UTC,
+# the actual intended weekly reset day. If the game's offset ever changes,
+# update it here too — these MUST stay in sync or generated week_index
+# values won't line up with what the game itself considers "this week."
+SECONDS_PER_WEEK = 604800
+WEEK_OFFSET_SEC = 3 * 86400
+
+
+def week_index_for_timestamp(ts: float) -> int:
+    return int((ts + WEEK_OFFSET_SEC) // SECONDS_PER_WEEK)
+
+
 VALID_CARS = {
     "abarth500", "abarth500_s1", "alfa_romeo_giulietta_qv", "alfa_romeo_giulietta_qv_le",
     "bmw_1m", "bmw_1m_s3", "bmw_m3_e30", "bmw_m3_e30_dtm", "bmw_m3_e30_gra", "bmw_m3_e30_s1",

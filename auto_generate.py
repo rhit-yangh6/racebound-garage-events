@@ -19,9 +19,8 @@ import json
 import random
 import sys
 
-from validate import VALID_CARS, LOANER_SKIP, VALID_TRACKS, validate
+from validate import VALID_CARS, LOANER_SKIP, VALID_TRACKS, validate, week_index_for_timestamp
 
-SECONDS_PER_WEEK = 604800
 WINDOW_WEEKS = 4     # always keep this many weeks (including the current one) filled
 CAR_COOLDOWN = 20    # weeks before a car can repeat
 TRACK_COOLDOWN = 6   # weeks before a track can repeat (only 14 tracks total)
@@ -31,7 +30,7 @@ ELIGIBLE_TRACKS = sorted(VALID_TRACKS)
 
 
 def current_week_index() -> int:
-    return int(datetime.datetime.now(datetime.timezone.utc).timestamp() // SECONDS_PER_WEEK)
+    return week_index_for_timestamp(datetime.datetime.now(datetime.timezone.utc).timestamp())
 
 
 def recent_picks(events: dict, target_week: int, cooldown: int, field: str) -> set:

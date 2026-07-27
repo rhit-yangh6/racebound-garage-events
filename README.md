@@ -6,14 +6,15 @@ game's own deterministic pick — nothing needs to be filled in ahead of time.
 
 ## Auto-generation (default — no manual work needed)
 
-`.github/workflows/auto_generate.yml` runs every Monday (and can be
-triggered manually via "Run workflow"), keeping the next 4 weeks always
-filled — it avoids repeating a car within 20 weeks or a track within 6
-weeks of its last use, falling back to the full pool if that ever leaves
-nothing to pick from. It only ever fills weeks that don't already have an
-entry, so hand-curated weeks (see below) are never touched or overwritten.
-It commits straight to `main` — this is meant to run with zero ongoing
-attention.
+`.github/workflows/auto_generate.yml` runs every Wednesday at 21:00 UTC —
+3 hours before the actual weekly reset (Monday 00:00 UTC, see below) —
+and can also be triggered manually via "Run workflow". It keeps the next
+4 weeks always filled, avoiding a repeat car within 20 weeks or a repeat
+track within 6 weeks of its last use, falling back to the full pool if
+that ever leaves nothing to pick from. It only ever fills weeks that
+don't already have an entry, so hand-curated weeks (see below) are never
+touched or overwritten. It commits straight to `main` — this is meant to
+run with zero ongoing attention.
 
 ## Hand-picking a specific week (optional)
 
@@ -52,5 +53,9 @@ straight to `main`.
 }
 ```
 
-`week_index` is `floor(unix_timestamp / 604800)` — a raw week counter since
-the Unix epoch, matching the game's own `GlobalEvent.week_index()`.
+`week_index` is `floor((unix_timestamp + 259200) / 604800)` — a raw week
+counter since the Unix epoch, shifted 3 days (259200 sec) so boundaries
+land on **Monday 00:00 UTC** instead of the raw-epoch default of Thursday
+(Jan 1 1970 was a Thursday). Matches the game's own `GlobalEvent.week_index()`
+exactly — see `WEEK_OFFSET_SEC` there and in `validate.py` here. If you
+ever need this by hand, `add_week.py --date YYYY-MM-DD` computes it for you.

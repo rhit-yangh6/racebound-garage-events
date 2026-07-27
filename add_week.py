@@ -22,18 +22,16 @@ import datetime
 import json
 import sys
 
-from validate import VALID_CARS, LOANER_SKIP, VALID_TRACKS
-
-SECONDS_PER_WEEK = 604800
+from validate import VALID_CARS, LOANER_SKIP, VALID_TRACKS, SECONDS_PER_WEEK, WEEK_OFFSET_SEC, week_index_for_timestamp
 
 
 def week_index_for_date(date_str: str) -> int:
     d = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
-    return int(d.timestamp() // SECONDS_PER_WEEK)
+    return week_index_for_timestamp(d.timestamp())
 
 
 def next_free_week(events: dict) -> int:
-    now_week = int(datetime.datetime.now(datetime.timezone.utc).timestamp() // SECONDS_PER_WEEK)
+    now_week = week_index_for_timestamp(datetime.datetime.now(datetime.timezone.utc).timestamp())
     existing = {int(k) for k in events if k.isdigit()}
     w = max(existing, default=now_week - 1) + 1
     if not existing:
@@ -89,7 +87,7 @@ def main() -> int:
         f.write("\n")
 
     action = "Overwrote" if overwriting else "Added"
-    start = datetime.datetime.fromtimestamp(week * SECONDS_PER_WEEK, tz=datetime.timezone.utc)
+    start = datetime.datetime.fromtimestamp(week * SECONDS_PER_WEEK - WEEK_OFFSET_SEC, tz=datetime.timezone.utc)
     print(f"{action} week {week} (starts {start:%Y-%m-%d}): {args.car} @ {args.track}"
           + (f" [{args.layout}]" if args.layout else ""))
     print(f"Wrote {args.file} — review with `git diff`, then commit and push when ready.")
