@@ -29,6 +29,12 @@
       "track": "ks_laguna_seca",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2957": {
+      "car": "ferrari_312t",
+      "track": "ks_silverstone1967",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
