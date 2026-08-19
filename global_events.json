@@ -35,6 +35,12 @@
       "track": "ks_silverstone1967",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2958": {
+      "car": "ferrari_458_s3",
+      "track": "ks_monza66",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
