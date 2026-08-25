@@ -19,14 +19,19 @@ import json
 import random
 import sys
 
-from validate import VALID_CARS, LOANER_SKIP, VALID_TRACKS, validate, week_index_for_timestamp
+from validate import (VALID_CARS, LOANER_SKIP, VALID_LAYOUTS, ELIGIBLE_LAYOUTS,
+                      validate, week_index_for_timestamp)
 
 WINDOW_WEEKS = 4     # always keep this many weeks (including the current one) filled
 CAR_COOLDOWN = 20    # weeks before a car can repeat
 TRACK_COOLDOWN = 6   # weeks before a track can repeat (only 14 tracks total)
 
 ELIGIBLE_CARS = sorted(VALID_CARS - LOANER_SKIP)
-ELIGIBLE_TRACKS = sorted(VALID_TRACKS)
+# (folder, layout) pairs, not bare folders. Picking a folder and writing
+# layout "" produced entries no client could resolve — find_track() matches
+# both fields exactly — so every one of those weeks quietly fell back to the
+# player's own local pick instead of being the same event for everyone.
+ELIGIBLE_PAIRS = list(ELIGIBLE_LAYOUTS)
 
 
 def current_week_index() -> int:
@@ -50,12 +55,15 @@ def pick_for_week(events: dict, week: int, rng: random.Random) -> dict:
     recent_tracks = recent_picks(events, week, TRACK_COOLDOWN, "track")
 
     car_choices = [c for c in ELIGIBLE_CARS if c not in recent_cars] or ELIGIBLE_CARS
-    track_choices = [t for t in ELIGIBLE_TRACKS if t not in recent_tracks] or ELIGIBLE_TRACKS
+    # Cooldown is still by FOLDER, so Silverstone GP one week and Silverstone
+    # National the next still reads as a repeat and is avoided.
+    pair_choices = [p for p in ELIGIBLE_PAIRS if p[0] not in recent_tracks] or ELIGIBLE_PAIRS
 
+    track, layout = rng.choice(pair_choices)
     return {
         "car": rng.choice(car_choices),
-        "track": rng.choice(track_choices),
-        "layout": "",
+        "track": track,
+        "layout": layout,
         "note": "auto-generated",
     }
 
@@ -97,7 +105,8 @@ def main() -> int:
         f.write("\n")
 
     for week, entry in added:
-        print(f"Generated week {week}: {entry['car']} @ {entry['track']}")
+        name = VALID_LAYOUTS[(entry["track"], entry["layout"])][1]
+        print(f"Generated week {week}: {entry['car']} @ {name}")
     return 0
 
 

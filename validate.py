@@ -48,12 +48,57 @@ VALID_CARS = {
 # Drift-spec loaners the game itself excludes from selection — never valid here either.
 LOANER_SKIP = {"bmw_m3_e30_drift", "bmw_m3_e92_drift", "bmw_z4_drift"}
 
-VALID_TRACKS = {
-    "magione", "imola", "monza", "mugello", "spa",
-    "ks_silverstone", "ks_silverstone1967", "ks_vallelunga",
-    "ks_nurburgring", "ks_zandvoort", "ks_laguna_seca",
-    "ks_black_cat_county", "ks_highlands", "ks_monza66",
+MAX_LAP_M = 8000.0
+
+# (folder, layout) -> (length_m, display name).
+#
+# A SNAPSHOT of the frozen reference-install table the game itself picks from
+# (scripts/core/license_slots.gd, consumed by GlobalEvent._build_frozen_pools).
+# This used to be a set of bare FOLDERS, and the note here used to say a layout
+# could not be checked from this repo because the data "only exists in each
+# player's own scanned AC install." That was wrong: the game bakes it, so it can
+# be mirrored here like VALID_CARS already is.
+#
+# It matters because TrackDB.find_track() matches folder AND layout EXACTLY. A
+# multi-layout circuit published with layout "" resolves to nothing on every
+# machine on earth, and each of those weeks silently fell back to the client's
+# own local pick — which is how weeks 2954 and 2958 shipped broken.
+VALID_LAYOUTS = {
+    ("imola", ""): (4909.0, "Imola"),
+    ("ks_black_cat_county", "layout_int"): (6478.0, "Black Cat County"),
+    ("ks_black_cat_county", "layout_long"): (11244.0, "Black Cat County - Long"),
+    ("ks_black_cat_county", "layout_short"): (6542.0, "Black Cat County - Short"),
+    ("ks_highlands", "layout_int"): (8152.0, "Highlands"),
+    ("ks_highlands", "layout_long"): (12191.0, "Highlands Long"),
+    ("ks_highlands", "layout_short"): (1714.0, "Highlands Short"),
+    ("ks_laguna_seca", ""): (3602.0, "Laguna Seca"),
+    ("ks_monza66", "full"): (10000.0, "Monza 1966 - Full Course"),
+    ("ks_monza66", "junior"): (2405.0, "Monza 1966 - Junior Course"),
+    ("ks_monza66", "road"): (5793.0, "Monza 1966 - Road Course"),
+    ("ks_nurburgring", "layout_gp_a"): (5148.0, "Nurburgring - GP"),
+    ("ks_nurburgring", "layout_gp_b"): (5137.0, "Nurburgring - GP (GT)"),
+    ("ks_nurburgring", "layout_sprint_a"): (3629.0, "Nurburgring - Sprint"),
+    ("ks_nurburgring", "layout_sprint_b"): (3618.0, "Nurburgring - Sprint (GT)"),
+    ("ks_silverstone", "gp"): (5901.0, "Silverstone GP"),
+    ("ks_silverstone", "international"): (3619.0, "Silverstone - International"),
+    ("ks_silverstone", "national"): (2638.0, "Silverstone - National"),
+    ("ks_silverstone1967", ""): (4710.0, "Silverstone 1967"),
+    ("ks_vallelunga", "classic_circuit"): (3222.0, "Vallelunga - Classic"),
+    ("ks_vallelunga", "club_circuit"): (1746.0, "Vallelunga - Club"),
+    ("ks_vallelunga", "extended_circuit"): (4085.0, "Vallelunga"),
+    ("ks_zandvoort", ""): (4307.0, "Zandvoort"),
+    ("magione", ""): (2507.0, "Magione"),
+    ("monza", ""): (5793.0, "Monza"),
+    ("mugello", ""): (5245.0, "Mugello"),
+    ("spa", ""): (7004.0, "Spa"),
 }
+
+# Folders only, for cooldown bookkeeping and error messages.
+VALID_TRACKS = {t for (t, _l) in VALID_LAYOUTS}
+
+# The pairs actually selectable: real layout, and short enough that the game's
+# lap-plausibility estimate still holds (GlobalEvent.MAX_LAP_M).
+ELIGIBLE_LAYOUTS = sorted(k for k, v in VALID_LAYOUTS.items() if v[0] <= MAX_LAP_M)
 
 
 def validate(data: dict) -> list[str]:
@@ -83,18 +128,22 @@ def validate(data: dict) -> list[str]:
 
         if not isinstance(track, str) or track not in VALID_TRACKS:
             errors.append(f'{prefix}: track "{track}" is not in the base-game track pool')
-
-        if not isinstance(layout, str):
-            errors.append(f'{prefix}: "layout" must be a string (use "" for a track\'s default layout)')
-
-        # Note: this script has no way to check the LAYOUT itself is real, or
-        # that the resulting track length stays under GlobalEvent.MAX_LAP_M
-        # (8000m) — that data only exists in each player's own scanned AC
-        # install, not here. ks_highlands specifically has both a short
-        # circuit layout and a ~12km "Long" point-to-point layout that
-        # exceeds the cap (see the game's own commit history for why) — the
-        # runtime's own validation in GlobalEvent._override_for_cycle()
-        # still catches this if you get a layout wrong, same as always.
+        elif not isinstance(layout, str):
+            errors.append(f'{prefix}: "layout" must be a string')
+        elif (track, layout) not in VALID_LAYOUTS:
+            opts = sorted(l for (t, l) in VALID_LAYOUTS if t == track)
+            shown = ", ".join(f'"{o}"' for o in opts)
+            errors.append(
+                f'{prefix}: layout "{layout}" does not exist for "{track}". '
+                f"find_track() matches folder AND layout exactly, so this "
+                f"resolves to nothing on every client and the week silently "
+                f"falls back to each player's own local pick. Valid: {shown}")
+        else:
+            length, name = VALID_LAYOUTS[(track, layout)]
+            if length > MAX_LAP_M:
+                errors.append(
+                    f'{prefix}: "{name}" is {length:.0f}m, over the {MAX_LAP_M:.0f}m cap '
+                    f"the lap-plausibility estimate holds for")
 
     return errors
 

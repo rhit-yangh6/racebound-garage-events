@@ -15,8 +15,8 @@
     "2954": {
       "car": "bmw_m3_e30",
       "track": "ks_silverstone",
-      "layout": "",
-      "note": "auto-generated"
+      "layout": "gp",
+      "note": "week of 2026-08-10 (layout named: find_track matches folder AND layout exactly)"
     },
     "2955": {
       "car": "lotus_98t",
@@ -39,8 +39,8 @@
     "2958": {
       "car": "ferrari_458_s3",
       "track": "ks_monza66",
-      "layout": "",
-      "note": "auto-generated"
+      "layout": "road",
+      "note": "week of 2026-09-07 (layout named: find_track matches folder AND layout exactly)"
     }
   }
 }
