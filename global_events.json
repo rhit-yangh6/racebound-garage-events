@@ -41,6 +41,12 @@
       "track": "ks_monza66",
       "layout": "road",
       "note": "week of 2026-09-07 (layout named: find_track matches folder AND layout exactly)"
+    },
+    "2959": {
+      "car": "abarth500_s1",
+      "track": "ks_nurburgring",
+      "layout": "layout_gp_a",
+      "note": "auto-generated"
     }
   }
 }
