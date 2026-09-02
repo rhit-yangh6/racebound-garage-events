@@ -47,6 +47,12 @@
       "track": "ks_nurburgring",
       "layout": "layout_gp_a",
       "note": "auto-generated"
+    },
+    "2960": {
+      "car": "bmw_1m_s3",
+      "track": "magione",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
