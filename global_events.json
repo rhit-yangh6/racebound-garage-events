@@ -59,6 +59,12 @@
       "track": "ks_silverstone",
       "layout": "international",
       "note": "auto-generated"
+    },
+    "2962": {
+      "car": "lotus_evora_s_s2",
+      "track": "ks_black_cat_county",
+      "layout": "layout_short",
+      "note": "auto-generated"
     }
   }
 }
