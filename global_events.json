@@ -65,6 +65,12 @@
       "track": "ks_black_cat_county",
       "layout": "layout_short",
       "note": "auto-generated"
+    },
+    "2963": {
+      "car": "lotus_exige_s",
+      "track": "spa",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
