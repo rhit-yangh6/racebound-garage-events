@@ -71,6 +71,12 @@
       "track": "spa",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2964": {
+      "car": "ferrari_f40",
+      "track": "monza",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
