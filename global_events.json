@@ -77,6 +77,12 @@
       "track": "monza",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2965": {
+      "car": "mercedes_sls_gt3",
+      "track": "imola",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
