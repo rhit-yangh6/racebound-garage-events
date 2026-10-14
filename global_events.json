@@ -83,6 +83,12 @@
       "track": "imola",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2966": {
+      "car": "abarth500",
+      "track": "ks_nurburgring",
+      "layout": "layout_sprint_a",
+      "note": "auto-generated"
     }
   }
 }
