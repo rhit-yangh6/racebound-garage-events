@@ -89,6 +89,12 @@
       "track": "ks_nurburgring",
       "layout": "layout_sprint_a",
       "note": "auto-generated"
+    },
+    "2967": {
+      "car": "mercedes_sls",
+      "track": "ks_vallelunga",
+      "layout": "extended_circuit",
+      "note": "auto-generated"
     }
   }
 }
