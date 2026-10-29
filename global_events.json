@@ -95,6 +95,12 @@
       "track": "ks_vallelunga",
       "layout": "extended_circuit",
       "note": "auto-generated"
+    },
+    "2968": {
+      "car": "bmw_m3_e30_dtm",
+      "track": "ks_monza66",
+      "layout": "junior",
+      "note": "auto-generated"
     }
   }
 }
