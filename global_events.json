@@ -101,6 +101,12 @@
       "track": "ks_monza66",
       "layout": "junior",
       "note": "auto-generated"
+    },
+    "2969": {
+      "car": "ferrari_laferrari",
+      "track": "ks_black_cat_county",
+      "layout": "layout_short",
+      "note": "auto-generated"
     }
   }
 }
