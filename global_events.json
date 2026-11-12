@@ -107,6 +107,12 @@
       "track": "ks_black_cat_county",
       "layout": "layout_short",
       "note": "auto-generated"
+    },
+    "2970": {
+      "car": "ferrari_f40_s3",
+      "track": "ks_zandvoort",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
