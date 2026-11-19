@@ -113,6 +113,12 @@
       "track": "ks_zandvoort",
       "layout": "",
       "note": "auto-generated"
+    },
+    "2971": {
+      "car": "lotus_evora_gte",
+      "track": "spa",
+      "layout": "",
+      "note": "auto-generated"
     }
   }
 }
